@@ -37,7 +37,7 @@ Aby zapewnić sprawną organizację kursu oraz efektywną komunikację, wszyscy 
 
 *   **Komunikacja i Wsparcie:** Platforma Discord jest oficjalnym kanałem komunikacji. W przypadku jakichkolwiek problemów, pytań lub wątpliwości dotyczących materiału, jest to właściwe miejsce do uzyskania pomocy i prowadzenia dyskusji.
 
-*   **Organizacja Pracy w Git:** Prace nad zadaniami należy prowadzić na osobnej gałęzi (branch) w systemie Git, stosując format nazewnictwa: `{numer_zadania}-{imie}-{nazwisko}`.
+*   **Organizacja Pracy w Git:** Prace nad zadaniami należy prowadzić na osobnej gałęzi (branch) w systemie Git, stosując format nazewnictwa: `{numer_listy}-{imie}-{nazwisko}`.
 
 *   **Zgłaszanie Zadań do Sprawdzenia:** Ukończone zadania należy zgłaszać poprzez utworzenie Pull Requesta na platformie GitHub. Tytuł Pull Requesta musi być zgodny ze schematem: `{numer_listy}-{imie}-{nazwisko}`.
 
