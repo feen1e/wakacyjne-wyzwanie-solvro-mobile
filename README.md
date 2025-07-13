@@ -17,15 +17,15 @@ Kurs został zaprojektowany jako intensywny, 7-tygodniowy program, łączący re
 ## Spis treści
 - Lista 0 (Podstawy Darta i Konfiguracja Środowiska).  
 Zgłębianie kluczowych elementów składni języka Dart, instalacja Flutter SDK oraz przygotowanie profesjonalnego środowiska programistycznego (IDE i emulator/urządzenie).
-- Lista 1 (Podstawowe funkcjonalności Flutter'a). 
+- Lista 1 (Podstawowe funkcjonalności Flutter'a).  
 Wprowadzenie do filozofii "wszystko jest widżetem". Praktyczne wykorzystanie widżetów Stateless i Stateful oraz budowanie pierwszych, responsywnych layoutów.
-- Lista 2 (Zarządzanie stanem i nawigacja w aplikacji). 
+- Lista 2 (Zarządzanie stanem i nawigacja w aplikacji).  
 Implementacja przepływu danych i logiki za pomocą wzorców zarządzania stanem (Riverpod) oraz obsługa nawigacji między ekranami przy użyciu Navigator API.
-- Lista 3 (Trwałość Danych i Adaptacyjny Interfejs). 
+- Lista 3 (Trwałość Danych i Adaptacyjny Interfejs).  
 Wykorzystanie pamięci lokalnej do przechowywania danych aplikacji (np. shared_preferences) oraz implementacja dynamicznej zmiany motywu (Light/Dark Theme) w oparciu o stan aplikacji.
-- Lista 4 (Pozyskiwanie danych z api i autentykacja użytkownika). 
+- Lista 4 (Pozyskiwanie danych z api i autentykacja użytkownika).  
 Obsługa zapytań HTTP do zewnętrznych API, przetwarzanie danych w formacie JSON oraz implementacja kompletnego procesu autentykacji użytkownika (rejestracja, logowanie).
-- Lista 5 (Filtrowanie, wyszukiwanie i dokończenie CRUD-a). 
+- Lista 5 (Filtrowanie, wyszukiwanie i dokończenie CRUD-a).  
 Kompleksowa implementacja operacji CRUD (Create, Read, Update, Delete) na zbiorze danych, uzupełniona o funkcjonalności dynamicznego wyszukiwania i filtrowania wyników.
 
 ## Projekt
