@@ -18,7 +18,7 @@ Kurs został zaprojektowany jako intensywny, 7-tygodniowy program, łączący re
 * Lista 0 (Podstawy Darta i Konfiguracja Środowiska).  
 Zgłębianie kluczowych elementów składni języka Dart, instalacja Flutter SDK oraz przygotowanie profesjonalnego środowiska programistycznego (IDE i emulator/urządzenie).
 * Lista 1 (Podstawowe funkcjonalności Flutter'a).  
-Wprowadzenie do filozofii "wszystko jest widżetem". Praktyczne wykorzystanie widżetów Stateless i Stateful oraz budowanie pierwszych, responsywnych layoutów.
+Wprowadzenie do filozofii "Everything's a widget". Praktyczne wykorzystanie widżetów Stateless i Stateful oraz budowanie pierwszych, responsywnych layoutów.
 * Lista 2 (Zarządzanie stanem i nawigacja w aplikacji).  
 Implementacja przepływu danych i logiki za pomocą wzorców zarządzania stanem (Riverpod, flutter_hooks) oraz obsługa nawigacji między ekranami przy użyciu GoRouter API.
 * Lista 3 (Trwałość Danych i Adaptacyjny Interfejs).  
