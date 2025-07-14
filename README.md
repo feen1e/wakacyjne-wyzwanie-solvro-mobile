@@ -7,7 +7,7 @@ Kurs został zaprojektowany jako intensywny, 7-tygodniowy program, łączący re
 * **Całkowity czas trwania:** 7 tygodni.
 * **Moduły tematyczne:** 5 tygodni poświęconych na realizację cotygodniowych list zadań.
 * **Projekt Finałowy:** 2 tygodnie przeznaczone na samodzielną realizację projektu końcowego.
-* **Spotkania cykliczne:** Cotygodniowe sesje "Solvro Talks" (20-30 minut), poświęcone na omówienie kluczowych zagadnień i sesję Q&A.
+* **Spotkania cykliczne:** Cotygodniowe sesje "Lightning Talks" (20-30 minut), poświęcone na omówienie kluczowych zagadnień i sesję Q&A.
 
 ## Wymagania
 
