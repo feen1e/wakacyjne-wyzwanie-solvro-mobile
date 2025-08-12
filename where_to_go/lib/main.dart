@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
 
 import "dream_place_screen.dart";
 import "gen/assets.gen.dart";
@@ -7,15 +8,32 @@ void main() {
   runApp(const MyApp());
 }
 
+// TODOfix states of DreamPlaceScreens
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 100, 180, 255),
+    );
+
     return MaterialApp(
       title: "Dream Place App",
       theme: ThemeData(
         useMaterial3: true,
+        textTheme: GoogleFonts.latoTextTheme(),
+        colorScheme: appColorScheme,
+        scaffoldBackgroundColor: appColorScheme.surfaceContainer,
+        cardTheme: CardThemeData(
+          color: appColorScheme.surfaceBright,
+          elevation: 4,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: appColorScheme.primary,
+          foregroundColor: appColorScheme.onPrimary,
+          centerTitle: true,
+        ),
       ),
       home: PlacesList(places: places),
     );
@@ -35,10 +53,11 @@ class PlacesList extends StatelessWidget {
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 500,
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
+          childAspectRatio: 3 / 2,
         ),
         itemCount: places.length,
         itemBuilder: (context, index) {
@@ -49,11 +68,14 @@ class PlacesList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-                      child: Image.asset(
-                        place.image.path,
-                        fit: BoxFit.cover,
+                    child: Hero(
+                      tag: place.title,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                        child: Image.asset(
+                          place.image.path,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -61,7 +83,7 @@ class PlacesList extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       place.title,
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -76,13 +98,33 @@ class PlacesList extends StatelessWidget {
           );
         },
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_rounded),
+            label: "Strona główna",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_rounded),
+            label: "Ulubione",
+          ),
+        ],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        iconSize: 32,
+        onTap: (index) {
+          // TODOHandle navigation
+        },
+      ),
     );
   }
 }
 
+// TODOcreate favorites view
+
 List<DreamPlaceScreen> places = [
   DreamPlaceScreen(
-    backgroundColor: Colors.lightBlue.shade50,
     title: "Rejkiawik, Islandia",
     image: Assets.images.reykjavikView,
     placeName: "Rejkiawik",
@@ -94,7 +136,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.deepPurple.shade50,
     title: "Zermatt, Szwajcaria",
     image: Assets.images.zermattView,
     placeName: "Zermatt",
@@ -106,7 +147,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.red.shade50,
     title: "Kioto, Japonia",
     image: Assets.images.kyotoView,
     placeName: "Kioto",
@@ -118,7 +158,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.indigo.shade50,
     title: "Sydney, Australia",
     image: Assets.images.sydneyView,
     placeName: "Sydney",
@@ -130,7 +169,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.teal.shade50,
     title: "Kapsztad, RPA",
     image: Assets.images.capeTownView,
     placeName: "Kapsztad",
@@ -142,7 +180,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.green.shade50,
     title: "Paryż, Francja",
     image: Assets.images.parisView,
     placeName: "Paryż",
@@ -154,7 +191,6 @@ List<DreamPlaceScreen> places = [
     ],
   ),
   DreamPlaceScreen(
-    backgroundColor: Colors.green.shade50,
     title: "Rio de Janeiro, Brazylia",
     image: Assets.images.rioView,
     placeName: "Rio de Janeiro",

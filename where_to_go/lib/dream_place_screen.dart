@@ -5,14 +5,12 @@ import "gen/assets.gen.dart";
 class DreamPlaceScreen extends StatefulWidget {
   const DreamPlaceScreen(
       {super.key,
-      required this.backgroundColor,
       required this.title,
       required this.image,
       required this.placeName,
       required this.placeDescription,
       required this.infoColumns});
 
-  final Color backgroundColor;
   final String title;
   final AssetGenImage image;
   final String placeName;
@@ -35,22 +33,34 @@ class _DreamPlaceScreenState extends State<DreamPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.backgroundColor,
         appBar: AppBar(
-          backgroundColor: widget.backgroundColor,
           title: Text(widget.title),
           actions: [
             IconButton(
-              icon: Icon(_isFavorited ? Icons.favorite : Icons.favorite_border),
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+                child: Icon(
+                  _isFavorited ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  key: ValueKey<bool>(_isFavorited),
+                  color: _isFavorited ? Colors.redAccent.shade400 : null,
+                ),
+              ),
               onPressed: _toggleFavorite,
             )
           ],
         ),
         body: Column(
           children: [
-            Image.asset(widget.image.path, fit: BoxFit.cover),
+            Hero(
+              tag: widget.title,
+              child: Image.asset(
+                widget.image.path,
+                fit: BoxFit.cover,
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -100,7 +110,13 @@ class InfoColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Icon(icon), Text(text)],
+      children: [
+        Icon(icon, size: 28, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(
+          height: 4,
+        ),
+        Text(text)
+      ],
     );
   }
 }
