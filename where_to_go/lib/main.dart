@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
+import "dart:async";
 
 import "dream_place_screen.dart";
 import "gen/assets.gen.dart";
@@ -92,8 +93,8 @@ class PlacesList extends StatelessWidget {
                 ],
               ),
             ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute<Widget>(builder: (context) => place));
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute<Widget>(builder: (context) => place));
             },
           );
         },
