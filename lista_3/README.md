@@ -1,4 +1,4 @@
-# Lista 3 (Pozyskiwanie danych lokalnie + dark/light theme)
+# Lista 3 (Przechowywanie danych lokalnie + dark/light theme)
 
 ## 1. Problem: Dane znikają po restarcie aplikacji
 
