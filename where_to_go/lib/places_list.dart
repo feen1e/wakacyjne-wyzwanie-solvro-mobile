@@ -29,7 +29,7 @@ class PlacesList extends ConsumerWidget {
           final place = places[index];
           return GestureDetector(
             onTap: () async {
-              await GoRouter.of(context).push("${DetailsScreen.route}/${place.id}");
+              await context.push("${DetailsScreen.route}/${place.id}");
             },
             child: Card(
               child: Stack(
@@ -109,9 +109,9 @@ class PlacesList extends ConsumerWidget {
         iconSize: 32,
         onTap: (index) {
           if (index == 0) {
-            GoRouter.of(context).go("/");
+            context.go("/");
           } else if (index == 1) {
-            GoRouter.of(context).go("/favorites");
+            context.go("/favorites");
           }
         },
       ),

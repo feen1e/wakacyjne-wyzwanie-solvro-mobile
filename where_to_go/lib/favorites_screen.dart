@@ -3,15 +3,14 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
 import "details_screen.dart";
-import "features/places/places_provider.dart";
+import "features/favorite/favorite_places_provider.dart";
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
-    final favoritePlaces = places.where((place) => place.isFavorite).toList();
+    final favoritePlaces = ref.watch(favoritePlacesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +59,7 @@ class FavoritesScreen extends ConsumerWidget {
                     ),
                   ),
                   onTap: () async {
-                    await GoRouter.of(context).push("${DetailsScreen.route}/${place.id}");
+                    await context.push("${DetailsScreen.route}/${place.id}");
                   },
                 );
               },
@@ -86,9 +85,9 @@ class FavoritesScreen extends ConsumerWidget {
         currentIndex: 1,
         onTap: (index) {
           if (index == 0) {
-            GoRouter.of(context).go("/");
+            context.go("/");
           } else if (index == 1) {
-            GoRouter.of(context).go("/favorites");
+            context.go("/favorites");
           }
         },
       ),

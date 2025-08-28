@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
+import "features/places/place_details_provider.dart";
 import "features/places/places_provider.dart";
 
 class DetailsScreen extends ConsumerWidget {
@@ -11,8 +12,7 @@ class DetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
-    final place = places.firstWhere((place) => place.id == id);
+    final place = ref.watch(PlaceProvider(id: id));
 
     final isFavorited = place.isFavorite;
 
