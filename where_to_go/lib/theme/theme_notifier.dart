@@ -5,7 +5,6 @@ part "theme_notifier.g.dart";
 
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
-
   @override
   Future<AppThemeMode> build() async {
     final repository = await ref.read(themeRepositoryProvider.future);

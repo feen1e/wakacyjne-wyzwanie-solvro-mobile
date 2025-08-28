@@ -14,7 +14,7 @@ final goRouter = GoRouter(
     GoRoute(
       path: "${DetailsScreen.route}/:id", // dynamiczny parametr
       builder: (context, state) {
-        final id = state.pathParameters["id"]!;
+        final id = int.parse(state.pathParameters["id"]!);
         return DetailsScreen(id: id);
       },
     ),

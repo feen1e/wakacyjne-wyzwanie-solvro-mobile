@@ -3,7 +3,6 @@ import "package:shared_preferences/shared_preferences.dart";
 
 import "../shared_preferences_provider.dart";
 
-
 abstract class ThemeRepository {
   Future<AppThemeMode> loadTheme();
   Future<void> saveTheme(AppThemeMode theme);
@@ -33,9 +32,9 @@ enum AppThemeMode {
   system;
 
   factory AppThemeMode.fromString(String value) => AppThemeMode.values.firstWhere(
-    (e) => e.name == value,
-    orElse: () => AppThemeMode.system,
-  );
+        (e) => e.name == value,
+        orElse: () => AppThemeMode.system,
+      );
 }
 
 final themeRepositoryProvider = FutureProvider<ThemeRepository>((ref) async {

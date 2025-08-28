@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
-import "../features/favorite/favorite_places_provider.dart";
+import "../db_places_provider.dart";
 import "details_screen.dart";
 
 class FavoritesScreen extends ConsumerWidget {
@@ -16,8 +16,16 @@ class FavoritesScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Ulubione miejsca"),
       ),
-      body: favoritePlaces.isNotEmpty
-          ? GridView.builder(
+      body: favoritePlaces.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(child: Text("Error: $error")),
+          data: (favoritePlaces) {
+            if (favoritePlaces.isEmpty) {
+              return Center(
+                child: Text("Brak ulubionych miejsc", style: Theme.of(context).textTheme.titleMedium),
+              );
+            }
+            return GridView.builder(
               padding: const EdgeInsets.all(8),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 250,
@@ -38,8 +46,8 @@ class FavoritesScreen extends ConsumerWidget {
                             tag: place.title,
                             child: ClipRRect(
                               borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-                              child: Image.asset(
-                                place.image.path,
+                              child: Image.network(
+                                place.imagePath,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -63,10 +71,8 @@ class FavoritesScreen extends ConsumerWidget {
                   },
                 );
               },
-            )
-          : Center(
-              child: Text("Brak ulubionych miejsc", style: Theme.of(context).textTheme.titleMedium),
-            ),
+            );
+          }),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
