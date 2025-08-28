@@ -4,7 +4,6 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 import "../../place.dart";
 import "places_provider.dart";
 
-
 part "place_details_provider.g.dart";
 
 @riverpod
