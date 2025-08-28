@@ -2,19 +2,32 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../features/places/places_provider.dart";
+import "../theme/local_theme_repository.dart";
+import "../theme/theme_notifier.dart";
 import "details_screen.dart";
-import "features/places/places_provider.dart";
 
-class PlacesList extends ConsumerWidget {
-  const PlacesList({super.key});
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final places = ref.watch(placesProvider);
+    final themeNotifier = ref.watch(themeNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Lista miejsc"),
+        actions: [
+          IconButton(
+            icon: Icon(
+              ref.watch(themeNotifierProvider).value == AppThemeMode.light
+                  ? Icons.dark_mode_rounded
+                  : Icons.light_mode_rounded,
+            ),
+            onPressed: themeNotifier.toggleTheme,
+          ),
+        ],
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
@@ -53,7 +66,7 @@ class PlacesList extends ConsumerWidget {
                         padding: const EdgeInsets.all(8),
                         child: Text(
                           place.title,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -80,7 +93,7 @@ class PlacesList extends ConsumerWidget {
                           child: Icon(
                             place.isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                             key: ValueKey<bool>(place.isFavorite),
-                            color: place.isFavorite ? Colors.redAccent.shade400 : null,
+                            color: place.isFavorite ? Colors.redAccent.shade400 : Colors.black,
                           ),
                         ),
                       ),

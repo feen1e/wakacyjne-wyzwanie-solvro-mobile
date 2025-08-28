@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../features/favorite/favorite_places_provider.dart";
 import "details_screen.dart";
-import "features/favorite/favorite_places_provider.dart";
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
@@ -49,7 +49,7 @@ class FavoritesScreen extends ConsumerWidget {
                           padding: const EdgeInsets.all(8),
                           child: Text(
                             place.title,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.titleSmall,
                             textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -64,8 +64,8 @@ class FavoritesScreen extends ConsumerWidget {
                 );
               },
             )
-          : const Center(
-              child: Text("Brak ulubionych miejsc", style: TextStyle(fontSize: 20)),
+          : Center(
+              child: Text("Brak ulubionych miejsc", style: Theme.of(context).textTheme.titleMedium),
             ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

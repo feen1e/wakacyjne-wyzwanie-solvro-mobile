@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:google_fonts/google_fonts.dart";
 
 import "app_router.dart";
+import "theme/app_theme.dart";
+import "theme/local_theme_repository.dart";
+import "theme/theme_notifier.dart";
 
 void main() {
   runApp(
@@ -12,32 +14,24 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final appColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 100, 180, 255),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeAsync = ref.watch(themeNotifierProvider);
+    final appThemeEnum = themeAsync.valueOrNull ?? AppThemeMode.system;
+    final phoneBrightness = MediaQuery.of(context).platformBrightness;
+
+    final appTheme = switch (appThemeEnum) {
+      AppThemeMode.light => AppTheme().light,
+      AppThemeMode.dark => AppTheme().dark,
+      AppThemeMode.system => phoneBrightness == Brightness.dark ? AppTheme().dark : AppTheme().light,
+    };
 
     return MaterialApp.router(
       title: "Dream Place App",
-      theme: ThemeData(
-        useMaterial3: true,
-        textTheme: GoogleFonts.latoTextTheme(),
-        colorScheme: appColorScheme,
-        scaffoldBackgroundColor: appColorScheme.surfaceContainer,
-        cardTheme: CardThemeData(
-          color: appColorScheme.surfaceBright,
-          elevation: 4,
-        ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: appColorScheme.primary,
-          foregroundColor: appColorScheme.onPrimary,
-          centerTitle: true,
-        ),
-      ),
+      theme: appTheme,
       routerConfig: goRouter,
     );
   }

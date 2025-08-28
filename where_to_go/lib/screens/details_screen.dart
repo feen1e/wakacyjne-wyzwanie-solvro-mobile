@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "features/places/place_details_provider.dart";
-import "features/places/places_provider.dart";
+import "../features/places/place_details_provider.dart";
+import "../features/places/places_provider.dart";
 
 class DetailsScreen extends ConsumerWidget {
   static const route = "/details";
@@ -52,16 +52,13 @@ class DetailsScreen extends ConsumerWidget {
               children: [
                 Text(
                   place.placeName,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
                   height: 8,
                   width: double.infinity,
                 ),
-                Text(place.placeDescription)
+                Text(place.placeDescription, style: Theme.of(context).textTheme.bodyLarge),
               ],
             ),
           ),
@@ -94,7 +91,7 @@ class InfoColumn extends StatelessWidget {
         const SizedBox(
           height: 4,
         ),
-        Text(text)
+        Text(text, style: Theme.of(context).textTheme.bodyMedium)
       ],
     );
   }
