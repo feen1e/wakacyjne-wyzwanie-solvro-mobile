@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../gen/assets.gen.dart";
-import "../../place.dart";
+import "../../models/place.dart";
 
 part "places_provider.g.dart";
 
