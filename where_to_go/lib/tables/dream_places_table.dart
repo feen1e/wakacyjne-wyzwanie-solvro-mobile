@@ -6,6 +6,5 @@ class DreamPlaces extends Table {
   TextColumn get placeName => text()();
   TextColumn get description => text()();
   TextColumn get imagePath => text()();
-  TextColumn get infoColumns => text()();
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
 }

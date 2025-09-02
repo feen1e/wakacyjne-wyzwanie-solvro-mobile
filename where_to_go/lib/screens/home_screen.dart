@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
-import "../db_places_provider.dart";
+import "../providers.dart";
 import "../theme/local_theme_repository.dart";
 import "../theme/theme_notifier.dart";
 import "details_screen.dart";
@@ -15,24 +15,10 @@ class HomeScreen extends ConsumerWidget {
     final places = ref.watch(allPlacesProvider);
     final themeNotifier = ref.watch(themeNotifierProvider.notifier);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lista miejsc"),
-        actions: [
-          IconButton(
-            icon: Icon(
-              ref.watch(themeNotifierProvider).value == AppThemeMode.light
-                  ? Icons.dark_mode_rounded
-                  : Icons.light_mode_rounded,
-            ),
-            onPressed: themeNotifier.toggleTheme,
-          ),
-        ],
-      ),
-      body: places.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(child: Text("Error: $error")),
-        data: (places) => GridView.builder(
+    final Widget body = switch (places) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncError(:final error) => Center(child: Text("Error: $error")),
+      AsyncData(:final value) => GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 500,
@@ -40,9 +26,9 @@ class HomeScreen extends ConsumerWidget {
             crossAxisSpacing: 8,
             childAspectRatio: 3 / 2,
           ),
-          itemCount: places.length,
+          itemCount: value.length,
           itemBuilder: (context, index) {
-            final place = places[index];
+            final place = value[index];
             return GestureDetector(
               onTap: () async {
                 await context.push("${DetailsScreen.route}/${place.id}");
@@ -82,9 +68,8 @@ class HomeScreen extends ConsumerWidget {
                       right: 8,
                       child: GestureDetector(
                         onTap: () async {
-                          final repo = ref.read(placesRepositoryProvider);
+                          final repo = ref.read(repositoryProvider);
                           await repo.updateFavorite(place.id, isFavorite: !place.isFavorite);
-                          // ref.invalidate(allPlacesProvider);
                           ref.invalidate(placeDetailsProvider(place.id));
                         },
                         child: Container(
@@ -111,7 +96,24 @@ class HomeScreen extends ConsumerWidget {
             );
           },
         ),
+      _ => const Center(child: Text("No places found")),
+    };
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Lista miejsc"),
+        actions: [
+          IconButton(
+            icon: Icon(
+              ref.watch(themeNotifierProvider).value == AppThemeMode.light
+                  ? Icons.dark_mode_rounded
+                  : Icons.light_mode_rounded,
+            ),
+            onPressed: themeNotifier.toggleTheme,
+          ),
+        ],
       ),
+      body: body,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(

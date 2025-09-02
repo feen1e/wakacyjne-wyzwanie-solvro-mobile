@@ -1,9 +1,10 @@
 import "app_database.dart";
 
-class DreamPlacesRepository {
+class Repository {
   final AppDatabase _db;
-  DreamPlacesRepository(this._db);
+  Repository(this._db);
 
+  // DreamPlaces
   Future<List<DreamPlace>> getAllPlaces() => _db.getAllPlaces();
 
   Stream<List<DreamPlace>> watchAllPlaces() {
@@ -35,5 +36,30 @@ class DreamPlacesRepository {
 
   Future<int> deleteAllPlaces() async {
     return _db.delete(_db.dreamPlaces).go();
+  }
+
+  // InfoColumns
+  Future<List<InfoColumn>> getInfoColumnsByPlaceId(int dreamPlaceId) {
+    return _db.getInfoColumnsByPlaceId(dreamPlaceId);
+  }
+
+  Stream<List<InfoColumn>> watchInfoColumnsByPlaceId(int dreamPlaceId) {
+    return (_db.select(_db.infoColumns)..where((tbl) => tbl.dreamPlaceId.equals(dreamPlaceId))).watch();
+  }
+
+  Future<void> addInfoColumn(InfoColumnsCompanion column) async {
+    await _db.insertInfoColumn(column);
+  }
+
+  Future<void> updateInfoColumn(int id, InfoColumnsCompanion column) async {
+    await _db.updateInfoColumn(id, iconName: column.iconName.value, infoText: column.infoText.value);
+  }
+
+  Future<void> deleteInfoColumn(int id) async {
+    await _db.deleteInfoColumn(id);
+  }
+
+  Future<void> deleteInfoColumnsByPlaceId(int dreamPlaceId) async {
+    await _db.deleteInfoColumnsByPlaceId(dreamPlaceId);
   }
 }

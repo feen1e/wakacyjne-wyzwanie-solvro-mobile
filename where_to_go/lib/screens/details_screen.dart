@@ -1,9 +1,7 @@
-import "dart:convert";
-
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
-import "../db_places_provider.dart";
+import "../providers.dart";
 
 class DetailsScreen extends ConsumerWidget {
   static const route = "/details";
@@ -14,6 +12,7 @@ class DetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final place = ref.watch(placeDetailsProvider(id));
+    final infoColumns = ref.watch(infoColumnsProvider(id));
 
     return place.when(
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
@@ -21,13 +20,6 @@ class DetailsScreen extends ConsumerWidget {
         data: (place) {
           final isFavorited = place.isFavorite;
 
-          final infoColumns = (jsonDecode(place.infoColumns) as List<dynamic>?)?.map((e) {
-                final map = e as Map<String, dynamic>;
-                final icon = _iconFromString(map["icon"] as String);
-                final text = map["text"] as String;
-                return InfoColumn(icon: icon, text: text);
-              }).toList() ??
-              [];
           return Scaffold(
             appBar: AppBar(
               title: Text(place.title),
@@ -43,9 +35,8 @@ class DetailsScreen extends ConsumerWidget {
                     ),
                   ),
                   onPressed: () async {
-                    await ref.read(placesRepositoryProvider).updateFavorite(place.id, isFavorite: !isFavorited);
+                    await ref.read(repositoryProvider).updateFavorite(place.id, isFavorite: !isFavorited);
                     ref.invalidate(placeDetailsProvider(id));
-                    // ref.invalidate(allPlacesProvider);
                   },
                 )
               ],
@@ -75,14 +66,18 @@ class DetailsScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: infoColumns
-                      .map((e) => InfoColumn(
-                            icon: e.icon,
-                            text: e.text,
-                          ))
-                      .toList(),
+                infoColumns.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, stackTrace) => Center(child: Text("Error: $error")),
+                  data: (columns) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: columns
+                        .map((e) => InfoColumn(
+                              icon: PlaceIcon.fromString(e.iconName).icon,
+                              text: e.infoText,
+                            ))
+                        .toList(),
+                  ),
                 )
               ],
             ),
@@ -111,45 +106,36 @@ class InfoColumn extends StatelessWidget {
   }
 }
 
-IconData _iconFromString(String name) {
-  switch (name) {
-    case "restaurant":
-      return Icons.restaurant;
-    case "terrain":
-      return Icons.terrain;
-    case "auto_awesome":
-      return Icons.auto_awesome;
-    case "downhill_skiing":
-      return Icons.downhill_skiing;
-    case "landscape":
-      return Icons.landscape;
-    case "train":
-      return Icons.train;
-    case "park":
-      return Icons.park;
-    case "local_florist":
-      return Icons.local_florist;
-    case "ramen_dining":
-      return Icons.ramen_dining;
-    case "theaters":
-      return Icons.theaters;
-    case "beach_access":
-      return Icons.beach_access;
-    case "sailing":
-      return Icons.sailing;
-    case "water":
-      return Icons.water;
-    case "wine_bar":
-      return Icons.wine_bar;
-    case "location_city":
-      return Icons.location_city;
-    case "museum":
-      return Icons.museum;
-    case "coffee":
-      return Icons.coffee;
-    case "celebration":
-      return Icons.celebration;
-    default:
-      return Icons.info;
+enum PlaceIcon {
+  restaurant("restaurant", Icons.restaurant),
+  terrain("terrain", Icons.terrain),
+  autoAwesome("auto_awesome", Icons.auto_awesome),
+  downhillSkiing("downhill_skiing", Icons.downhill_skiing),
+  landscape("landscape", Icons.landscape),
+  train("train", Icons.train),
+  park("park", Icons.park),
+  localFlorist("local_florist", Icons.local_florist),
+  ramenDining("ramen_dining", Icons.ramen_dining),
+  theaters("theaters", Icons.theaters),
+  beachAccess("beach_access", Icons.beach_access),
+  sailing("sailing", Icons.sailing),
+  water("water", Icons.water),
+  wineBar("wine_bar", Icons.wine_bar),
+  locationCity("location_city", Icons.location_city),
+  museum("museum", Icons.museum),
+  coffee("coffee", Icons.coffee),
+  celebration("celebration", Icons.celebration),
+
+  info("info", Icons.info);
+
+  final String name;
+  final IconData icon;
+  const PlaceIcon(this.name, this.icon);
+
+  static PlaceIcon fromString(String name) {
+    return PlaceIcon.values.firstWhere(
+      (e) => e.name == name,
+      orElse: () => PlaceIcon.info,
+    );
   }
 }

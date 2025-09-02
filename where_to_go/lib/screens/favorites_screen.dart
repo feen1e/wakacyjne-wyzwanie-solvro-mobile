@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
-import "../db_places_provider.dart";
+import "../providers.dart";
 import "details_screen.dart";
 
 class FavoritesScreen extends ConsumerWidget {
@@ -12,20 +12,17 @@ class FavoritesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritePlaces = ref.watch(favoritePlacesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ulubione miejsca"),
-      ),
-      body: favoritePlaces.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(child: Text("Error: $error")),
-          data: (favoritePlaces) {
-            if (favoritePlaces.isEmpty) {
-              return Center(
-                child: Text("Brak ulubionych miejsc", style: Theme.of(context).textTheme.titleMedium),
-              );
-            }
-            return GridView.builder(
+    final Widget body = switch (favoritePlaces) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncError(:final error) => Center(child: Text("Error: $error")),
+      AsyncData(:final value) => value.isEmpty
+          ? Center(
+              child: Text(
+                "Brak ulubionych miejsc",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            )
+          : GridView.builder(
               padding: const EdgeInsets.all(8),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 250,
@@ -33,9 +30,9 @@ class FavoritesScreen extends ConsumerWidget {
                 crossAxisSpacing: 8,
                 childAspectRatio: 3 / 2,
               ),
-              itemCount: favoritePlaces.length,
+              itemCount: value.length,
               itemBuilder: (context, index) {
-                final place = favoritePlaces[index];
+                final place = value[index];
                 return GestureDetector(
                   child: Card(
                     child: Column(
@@ -71,8 +68,15 @@ class FavoritesScreen extends ConsumerWidget {
                   },
                 );
               },
-            );
-          }),
+            ),
+      _ => const Center(child: Text("Brak ulubionych miejsc"))
+    };
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Ulubione miejsca"),
+      ),
+      body: body,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
