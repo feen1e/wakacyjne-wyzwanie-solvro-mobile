@@ -22,17 +22,17 @@ class CreateDreamPlaceScreen extends ConsumerWidget {
     FormKeys.city.name: ["", Validators.required],
     FormKeys.country.name: ["", Validators.required],
     FormKeys.description.name: ["", Validators.required],
-    FormKeys.image.name: FormControl<List<SelectedFile>>(),
+    FormKeys.image.name: FormControl<List<SelectedFile>>(validators: [Validators.required]),
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Dream Place"),
+        title: const Text("Dodaj nowe miejsce"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         child: _buildForm(context, ref),
       ),
     );
@@ -55,62 +55,171 @@ class CreateDreamPlaceForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ReactiveForm(
       formGroup: form,
-      child: Column(
-        children: <Widget>[
-          ReactiveTextField<String>(
-            formControlName: FormKeys.city.name,
-            decoration: const InputDecoration(labelText: "Miasto"),
-          ),
-          ReactiveTextField<String>(
-            formControlName: FormKeys.country.name,
-            decoration: const InputDecoration(labelText: "Kraj"),
-          ),
-          ReactiveTextField<String>(
-            formControlName: FormKeys.description.name,
-            decoration: const InputDecoration(labelText: "Opis"),
-          ),
-          ReactiveImagePicker(
-            formControlName: FormKeys.image.name,
-            decoration: const InputDecoration(labelText: "Obraz"),
-            modes: const [ImagePickerMode.cameraImage, ImagePickerMode.galleryImage],
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              if (form.valid) {
-                final city = form.control(FormKeys.city.name).value as String;
-                final country = form.control(FormKeys.country.name).value as String;
-                final description = form.control(FormKeys.description.name).value as String;
-                final image = form.control(FormKeys.image.name).value as List<SelectedFile>;
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ReactiveTextField<String>(
+              formControlName: FormKeys.city.name,
+              decoration: const InputDecoration(labelText: "Miasto"),
+              validationMessages: {
+                ValidationMessage.required: (_) => "Miasto jest wymagane",
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            ReactiveTextField<String>(
+              formControlName: FormKeys.country.name,
+              decoration: const InputDecoration(labelText: "Kraj"),
+              validationMessages: {
+                ValidationMessage.required: (_) => "Kraj jest wymagany",
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            ReactiveTextField<String>(
+              formControlName: FormKeys.description.name,
+              minLines: 1,
+              maxLines: 5,
+              decoration: const InputDecoration(labelText: "Opis"),
+              validationMessages: {
+                ValidationMessage.required: (_) => "Opis jest wymagany",
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            ReactiveImagePicker(
+              formControlName: FormKeys.image.name,
+              decoration: const InputDecoration(labelText: "Obraz", hintText: "Wybierz obraz"),
+              modes: const [ImagePickerMode.cameraImage, ImagePickerMode.galleryImage],
+              selectedImageBuilder: (file) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                  ),
+                  child: ImageView(image: file),
+                );
+              },
+              inputBuilder: (onPressed) {
+                final hasError = form.control(FormKeys.image.name).hasError(ValidationMessage.required) &&
+                    form.control(FormKeys.image.name).touched;
+                return SizedBox(
+                  height: 24,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: onPressed,
+                    child: Text("Zdjęcie",
+                        style: hasError
+                            ? Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.error,
+                                )
+                            : Theme.of(context).textTheme.bodyLarge),
+                  ),
+                );
+              },
+              editIcon: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Icon(
+                    Icons.add_photo_alternate_rounded,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text("Zmień", style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
+              deleteIcon: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.delete_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "Usuń",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                  ),
+                ],
+              ),
+              deleteDialogBuilder: (context, file, onConfirm) {
+                return showDialog<void>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Usunąć zdjęcie?"),
+                    content: const Text("Czy na pewno chcesz usunąć to zdjęcie?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: const Text("Anuluj"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          onConfirm(file);
+                          context.pop();
+                        },
+                        child: const Text("Usuń"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              validationMessages: {
+                ValidationMessage.required: (_) => "Zdjęcie jest wymagane",
+              },
+              errorBuilder: (errorCode, error) => {},
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (form.valid) {
+                  final city = form.control(FormKeys.city.name).value as String;
+                  final country = form.control(FormKeys.country.name).value as String;
+                  final description = form.control(FormKeys.description.name).value as String;
+                  final image = form.control(FormKeys.image.name).value as List<SelectedFile>;
 
-                try {
-                  final repo = ref.read(repositoryProvider);
-                  await repo.addPlaceFromForm(
-                    city: city,
-                    country: country,
-                    description: description,
-                    imageFile: image.first.file!,
-                  );
+                  try {
+                    final repo = ref.read(repositoryProvider);
+                    await repo.addPlaceFromForm(
+                      city: city,
+                      country: country,
+                      description: description,
+                      imageFile: image.first.file!,
+                    );
 
-                  log("Created place: $city, $country, $description");
+                    log("Created place: $city, $country, $description");
 
-                  if (!context.mounted) {
-                    return;
+                    if (!context.mounted) {
+                      return;
+                    }
+                    ref.invalidate(allPlacesProvider);
+                    context.pop();
+                  } on Exception catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Failed to create place: $e")),
+                    );
                   }
-                  ref.invalidate(allPlacesProvider);
-                  context.pop();
-                } on Exception catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Failed to create place: $e")),
-                  );
+                } else {
+                  form.markAllAsTouched();
                 }
-              } else {
-                form.markAllAsTouched();
-              }
-            },
-            child: const Text("Create"),
-          ),
-        ],
+              },
+              child: const Text("Dodaj"),
+            ),
+          ],
+        ),
       ),
     );
   }
