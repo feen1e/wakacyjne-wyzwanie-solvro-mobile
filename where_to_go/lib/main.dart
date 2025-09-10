@@ -22,12 +22,11 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeAsync = ref.watch(themeNotifierProvider);
     final appThemeEnum = themeAsync.valueOrNull ?? AppThemeMode.system;
-    final phoneBrightness = MediaQuery.of(context).platformBrightness;
 
     final appTheme = switch (appThemeEnum) {
       AppThemeMode.light => AppTheme().light,
       AppThemeMode.dark => AppTheme().dark,
-      AppThemeMode.system => phoneBrightness == Brightness.dark ? AppTheme().dark : AppTheme().light,
+      AppThemeMode.system => AppTheme().light,
     };
 
     final router = createRouter(ref);
