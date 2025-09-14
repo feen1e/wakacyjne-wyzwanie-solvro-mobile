@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../app_router.dart";
 import "../places_providers.dart";
 
 class DetailsScreen extends ConsumerWidget {
@@ -38,7 +39,7 @@ class DetailsScreen extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.edit_rounded),
                   onPressed: () async {
-                    await context.push("/edit/${place.id}");
+                    await context.push("${AppRoutes.edit}${place.id}");
                   },
                 ),
                 IconButton(
