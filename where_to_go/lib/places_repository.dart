@@ -13,11 +13,14 @@ class PlacesRepository {
     unawaited(getAllPlaces());
   }
 
-  Future<List<DreamPlace>> getAllPlaces() async {
+  Future<List<DreamPlace>> getAllPlaces({String? sort}) async {
+    if (sort != "asc" && sort != "desc") {
+      sort = null;
+    }
     final response = await _dio.get<Map<String, dynamic>>(
       "/places",
       queryParameters: {
-        "sort": "asc",
+        "sort": sort ?? "asc",
         "sortBy": "name",
       },
     );
