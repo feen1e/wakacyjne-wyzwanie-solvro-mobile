@@ -82,6 +82,25 @@ class PlacesRepository {
     return (response.data?["filename"] ?? "") as String;
   }
 
+  Future<void> updatePlaceFromForm(
+      {required int id,
+      required String city,
+      required String country,
+      required String description,
+      XFile? imageFile}) async {
+    String filename = "";
+    if (imageFile != null) {
+      filename = await addPhoto(imageFile);
+    } else {
+      final existingPlace = await getPlaceById(id);
+      if (existingPlace != null) {
+        filename = existingPlace.imageUrl;
+      }
+    }
+    final name = "$city, $country";
+    await updatePlace(DreamPlace(id: id, name: name, description: description, imageUrl: filename));
+  }
+
   /* // InfoColumns
   Future<List<InfoColumn>> getInfoColumnsByPlaceId(int dreamPlaceId) {
     return _db.getInfoColumnsByPlaceId(dreamPlaceId);

@@ -7,13 +7,11 @@ import "shared_widgets/app_navigation_bar.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authNotifier = ref.read(authNotifierProvider.notifier);
     final themeNotifier = ref.watch(themeNotifierProvider.notifier);
-
 
     return Scaffold(
       appBar: AppBar(
