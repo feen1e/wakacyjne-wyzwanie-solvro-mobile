@@ -1,5 +1,7 @@
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
+import "auth_tokens.dart";
+
 class LocalAuthenticationRepository {
   static const _accessTokenKey = "ACCESS_TOKEN";
   static const _refreshTokenKey = "REFRESH_TOKEN";
@@ -10,11 +12,10 @@ class LocalAuthenticationRepository {
       : _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
   Future<void> saveTokens({
-    required String accessToken,
-    required String refreshToken,
+    required AuthTokens authTokens,
   }) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
+    await _secureStorage.write(key: _accessTokenKey, value: authTokens.accessToken);
+    await _secureStorage.write(key: _refreshTokenKey, value: authTokens.refreshToken);
   }
 
   Future<String?> getAccessToken() async {

@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../app_router.dart";
 import "../places_providers.dart";
-import "details_screen.dart";
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
@@ -72,7 +72,7 @@ class FavoritesScreen extends ConsumerWidget {
                     ),
                   ),
                   onTap: () async {
-                    await context.push("${DetailsScreen.route}/${place.id}");
+                    await context.push("${AppRoutes.details}${place.id}");
                   },
                 );
               },
@@ -107,11 +107,11 @@ class FavoritesScreen extends ConsumerWidget {
         currentIndex: 1,
         onTap: (index) {
           if (index == 0) {
-            context.go("/");
+            context.go(AppRoutes.home);
           } else if (index == 1) {
-            context.go("/favorites");
+            context.go(AppRoutes.favorites);
           } else if (index == 2) {
-            context.go("/settings");
+            context.go(AppRoutes.settings);
           }
         },
       ),

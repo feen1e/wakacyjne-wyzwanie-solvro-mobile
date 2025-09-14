@@ -55,7 +55,7 @@ class AuthInterceptor extends Interceptor {
 
         final requestOptions = err.requestOptions..extra["retry"] = true;
 
-        final accessToken = newTokens["accessToken"];
+        final accessToken = newTokens.accessToken;
         requestOptions.headers["Authorization"] = "Bearer $accessToken";
 
         final retryResponse = await _ref.read(dioProvider).fetch<Response<dynamic>>(requestOptions);

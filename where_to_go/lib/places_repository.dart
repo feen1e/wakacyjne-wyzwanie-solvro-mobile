@@ -14,7 +14,13 @@ class PlacesRepository {
   }
 
   Future<List<DreamPlace>> getAllPlaces() async {
-    final response = await _dio.get<Map<String, dynamic>>("/places?sort=asc&sortBy=name");
+    final response = await _dio.get<Map<String, dynamic>>(
+      "/places",
+      queryParameters: {
+        "sort": "asc",
+        "sortBy": "name",
+      },
+    );
     final data = response.data?["results"] as List<dynamic>;
     return data.map((e) => DreamPlace.fromJson(e as Map<String, dynamic>)).toList();
   }

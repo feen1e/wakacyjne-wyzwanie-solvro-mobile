@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 
+import "../app_router.dart";
 import "../places_providers.dart";
 import "../theme/local_theme_repository.dart";
 import "../theme/theme_notifier.dart";
-import "details_screen.dart";
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -42,7 +42,7 @@ class HomeScreen extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () async {
-                await context.push("${DetailsScreen.route}/${place.id}");
+                await context.push("${AppRoutes.details}${place.id}");
               },
               child: Card(
                 child: Stack(
@@ -104,7 +104,7 @@ class HomeScreen extends ConsumerWidget {
             );
           },
         ),
-      _ => const Center(child: Text("No places found")),
+      _ => const Center(child: Text("Nie znaleziono miejsc")),
     };
 
     return Scaffold(
@@ -143,17 +143,17 @@ class HomeScreen extends ConsumerWidget {
         iconSize: 32,
         onTap: (index) {
           if (index == 0) {
-            context.go("/");
+            context.go(AppRoutes.home);
           } else if (index == 1) {
-            context.go("/favorites");
+            context.go(AppRoutes.favorites);
           } else if (index == 2) {
-            context.go("/settings");
+            context.go(AppRoutes.settings);
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await context.push("/create");
+          await context.push(AppRoutes.create);
         },
         child: const Icon(Icons.add),
       ),

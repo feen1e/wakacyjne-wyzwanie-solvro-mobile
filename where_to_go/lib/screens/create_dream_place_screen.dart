@@ -186,32 +186,7 @@ class CreateDreamPlaceForm extends ConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 if (form.valid) {
-                  final city = form.control(FormKeys.city.name).value as String;
-                  final country = form.control(FormKeys.country.name).value as String;
-                  final description = form.control(FormKeys.description.name).value as String;
-                  final image = form.control(FormKeys.image.name).value as List<SelectedFile>;
-
-                  try {
-                    final repo = ref.read(repositoryProvider);
-                    await repo.addPlaceFromForm(
-                      city: city,
-                      country: country,
-                      description: description,
-                      imageFile: image.first.file!,
-                    );
-
-                    log("Created place: $city, $country, $description");
-
-                    if (!context.mounted) {
-                      return;
-                    }
-                    ref.invalidate(allPlacesProvider);
-                    context.pop();
-                  } on Exception catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Failed to create place: $e")),
-                    );
-                  }
+                  await submitForm(form, context, ref);
                 } else {
                   form.markAllAsTouched();
                 }
@@ -221,6 +196,35 @@ class CreateDreamPlaceForm extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+Future<void> submitForm(FormGroup form, BuildContext context, WidgetRef ref) async {
+  final city = form.control(FormKeys.city.name).value as String;
+  final country = form.control(FormKeys.country.name).value as String;
+  final description = form.control(FormKeys.description.name).value as String;
+  final image = form.control(FormKeys.image.name).value as List<SelectedFile>;
+
+  try {
+    final repo = ref.read(repositoryProvider);
+    await repo.addPlaceFromForm(
+      city: city,
+      country: country,
+      description: description,
+      imageFile: image.first.file!,
+    );
+
+    log("Created place: $city, $country, $description");
+
+    if (!context.mounted) {
+      return;
+    }
+    ref.invalidate(allPlacesProvider);
+    context.pop();
+  } on Exception catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to create place: $e")),
     );
   }
 }

@@ -4,7 +4,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "../places_providers.dart";
 
 class DetailsScreen extends ConsumerWidget {
-  static const route = "/details";
   final int id;
 
   const DetailsScreen({super.key, required this.id});

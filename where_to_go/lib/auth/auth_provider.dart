@@ -69,7 +69,7 @@ class AuthNotifier extends _$AuthNotifier {
     try {
       final refreshToken = await _authRepository.getRefreshToken();
       final result = await _authRepository.refreshToken(refreshToken!);
-      await _authRepository.saveTokens(result["accessToken"] as String, refreshToken);
+      await _authRepository.saveTokens(result);
       state = const AuthState.authenticated();
     } on Exception catch (e) {
       state = AuthState.error(e.toString());

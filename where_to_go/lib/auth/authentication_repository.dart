@@ -1,3 +1,4 @@
+import "auth_tokens.dart";
 import "local_authentication_repository.dart";
 import "remote_authentication_repository.dart";
 
@@ -20,10 +21,8 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      await _localRepo.saveTokens(
-        accessToken: remoteResult["accessToken"] as String,
-        refreshToken: remoteResult["refreshToken"] as String,
-      );
+
+      await _localRepo.saveTokens(authTokens: remoteResult);
       return true;
     } on Exception {
       return false;
@@ -39,10 +38,7 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      await _localRepo.saveTokens(
-        accessToken: remoteResult["accessToken"] as String,
-        refreshToken: remoteResult["refreshToken"] as String,
-      );
+      await _localRepo.saveTokens(authTokens: remoteResult);
       return true;
     } on Exception {
       return false;
@@ -61,15 +57,12 @@ class AuthenticationRepository {
     return _localRepo.getRefreshToken();
   }
 
-  Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+  Future<AuthTokens> refreshToken(String refreshToken) async {
     return _remoteRepo.refreshToken(refreshToken: refreshToken);
   }
 
-  Future<void> saveTokens(String accessToken, String refreshToken) async {
-    return _localRepo.saveTokens(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    );
+  Future<void> saveTokens(AuthTokens authTokens) async {
+    return _localRepo.saveTokens(authTokens: authTokens);
   }
 
   Future<void> clearTokens() async {

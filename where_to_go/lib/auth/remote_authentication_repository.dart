@@ -1,5 +1,7 @@
 import "package:dio/dio.dart";
 
+import "auth_tokens.dart";
+
 class RemoteAuthenticationRepository {
   final Dio _dio;
 
@@ -11,7 +13,7 @@ class RemoteAuthenticationRepository {
               receiveTimeout: const Duration(seconds: 5),
             ));
 
-  Future<Map<String, dynamic>> login({
+  Future<AuthTokens> login({
     required String email,
     required String password,
   }) async {
@@ -22,13 +24,8 @@ class RemoteAuthenticationRepository {
       });
 
       if (response.data != null) {
-        final accessToken = response.data!["accessToken"];
-        final refreshToken = response.data!["refreshToken"];
-
-        return {
-          "accessToken": accessToken,
-          "refreshToken": refreshToken,
-        };
+        final authTokens = AuthTokens.fromJson(response.data!);
+        return authTokens;
       } else {
         throw Exception("Login failed with status code: ${response.statusCode}");
       }
@@ -37,7 +34,7 @@ class RemoteAuthenticationRepository {
     }
   }
 
-  Future<Map<String, dynamic>> register({
+  Future<AuthTokens> register({
     required String email,
     required String password,
   }) async {
@@ -48,13 +45,8 @@ class RemoteAuthenticationRepository {
       });
 
       if (response.data != null) {
-        final accessToken = response.data!["accessToken"];
-        final refreshToken = response.data!["refreshToken"];
-
-        return {
-          "accessToken": accessToken,
-          "refreshToken": refreshToken,
-        };
+        final authTokens = AuthTokens.fromJson(response.data!);
+        return authTokens;
       } else {
         throw Exception("Registration failed with status code: ${response.statusCode}");
       }
@@ -63,7 +55,7 @@ class RemoteAuthenticationRepository {
     }
   }
 
-  Future<Map<String, dynamic>> refreshToken({
+  Future<AuthTokens> refreshToken({
     required String refreshToken,
   }) async {
     try {
@@ -75,10 +67,8 @@ class RemoteAuthenticationRepository {
       );
 
       if (response.data != null) {
-        final newAccessToken = response.data!["accessToken"];
-        return {
-          "accessToken": newAccessToken,
-        };
+        final authTokens = AuthTokens.fromJson(response.data!);
+        return authTokens;
       } else {
         throw Exception("Token refresh failed with status code: ${response.statusCode}");
       }

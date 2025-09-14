@@ -11,41 +11,51 @@ import "screens/login_screen.dart";
 import "screens/register_screen.dart";
 import "screens/settings_screen.dart";
 
+class AppRoutes {
+  static const String home = "/";
+  static const String details = "/details/";
+  static const String favorites = "/favorites";
+  static const String login = "/login";
+  static const String register = "/register";
+  static const String settings = "/settings";
+  static const String create = "/create";
+}
+
 GoRouter createRouter(WidgetRef ref) {
   final authListener = AuthNotifierListener(ref);
 
   return GoRouter(
-    initialLocation: "/",
+    initialLocation: AppRoutes.home,
     routes: [
       GoRoute(
-        path: "/",
+        path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
-        path: "${DetailsScreen.route}/:id", // dynamiczny parametr
+        path: "${AppRoutes.details}:id",
         builder: (context, state) {
           final id = int.parse(state.pathParameters["id"]!);
           return DetailsScreen(id: id);
         },
       ),
       GoRoute(
-        path: "/favorites",
+        path: AppRoutes.favorites,
         builder: (context, state) => const FavoritesScreen(),
       ),
       GoRoute(
-        path: "/login",
+        path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
-        path: "/register",
+        path: AppRoutes.register,
         builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
-        path: "/settings",
+        path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
-        path: "/create",
+        path: AppRoutes.create,
         builder: (context, state) => CreateDreamPlaceScreen(),
       ),
     ],
@@ -53,18 +63,18 @@ GoRouter createRouter(WidgetRef ref) {
     redirect: (context, state) {
       final authState = ref.read(authNotifierProvider);
 
-      final isLoggingIn = state.uri.toString() == "/login" || state.uri.toString() == "/register";
+      final isLoggingIn = state.uri.toString() == AppRoutes.login || state.uri.toString() == AppRoutes.register;
 
       return authState.maybeWhen(
           authenticated: () {
             if (isLoggingIn) {
-              return "/";
+              return AppRoutes.home;
             }
             return null;
           },
           unauthenticated: () {
             if (!isLoggingIn) {
-              return "/login";
+              return AppRoutes.login;
             }
             return null;
           },
