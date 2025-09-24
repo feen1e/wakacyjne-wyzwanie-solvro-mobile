@@ -6,6 +6,13 @@ import "package:reactive_image_picker/reactive_image_picker.dart";
 
 import "models/dream_place.dart";
 
+enum SortOrder {
+  asc,
+  desc;
+
+  String get value => name;
+}
+
 class PlacesRepository {
   final Dio _dio;
 
@@ -13,14 +20,11 @@ class PlacesRepository {
     unawaited(getAllPlaces());
   }
 
-  Future<List<DreamPlace>> getAllPlaces({String? sort}) async {
-    if (sort != "asc" && sort != "desc") {
-      sort = null;
-    }
+  Future<List<DreamPlace>> getAllPlaces({SortOrder? sort}) async {
     final response = await _dio.get<Map<String, dynamic>>(
       "/places",
       queryParameters: {
-        "sort": sort ?? "asc",
+        "sort": sort?.value ?? SortOrder.asc.value,
         "sortBy": "name",
       },
     );

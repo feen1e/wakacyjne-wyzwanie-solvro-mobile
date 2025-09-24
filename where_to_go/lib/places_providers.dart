@@ -17,13 +17,13 @@ PlacesRepository repository(Ref ref) {
 }
 
 @riverpod
-Future<List<DreamPlace>> allPlaces(Ref ref, {String? sort}) {
+Future<List<DreamPlace>> allPlaces(Ref ref, {SortOrder? sort}) {
   final repo = ref.read(repositoryProvider);
   return repo.getAllPlaces(sort: sort);
 }
 
 @riverpod
-Future<List<DreamPlace>> favoritePlaces(Ref ref, {String? sort}) async {
+Future<List<DreamPlace>> favoritePlaces(Ref ref, {SortOrder? sort}) async {
   final repo = ref.read(repositoryProvider);
   final all = await repo.getAllPlaces(sort: sort);
   return all.where((p) => p.isFavourite).toList();
